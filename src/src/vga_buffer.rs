@@ -1,5 +1,3 @@
-#[allow(dead_code)]
-
 // MACROS
 #[macro_export]
 macro_rules! print {
@@ -27,6 +25,7 @@ lazy_static! {
 }
 
 // TYPES
+#[allow(dead_code)]
 #[derive(Debug,Clone,Copy,PartialEq,Eq)]
 #[repr(u8)]
 pub enum Color {
