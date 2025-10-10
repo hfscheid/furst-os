@@ -159,3 +159,24 @@ pub fn test_vga() {
 pub fn _print(args: fmt::Arguments) {
     WRITER.lock().write_fmt(args).unwrap();
 }
+
+// TESTS
+#[test_case]
+fn test_println() {
+    println!("test_println output");
+}
+#[test_case]
+fn test_println_shift_offscreen() {
+    for _ in 0..200 {
+        println!("test_println_shift_offscreen output");
+    }
+}
+#[test_case]
+fn test_println_output() {
+    let s ="test_println_output output";
+    println!("{}", s);
+    for (i, c) in s.chars().enumerate() {
+        let screen_c = WRITER.lock().buffer.chars[BUFFER_HEIGHT-2][i].read();
+        assert_eq!(char::from(screen_c.ascii_character), c);
+    }
+}
