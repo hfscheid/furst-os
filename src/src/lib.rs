@@ -8,8 +8,8 @@
 // REEXPORTS
 pub mod serial;
 pub mod vga_buffer;
-mod interrupt;
-mod gdt;
+pub mod interrupt;
+pub mod gdt;
 
 // PANIC HANDLER
 use core::panic::PanicInfo;
