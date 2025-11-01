@@ -18,6 +18,8 @@ pub extern "C" fn _start() -> !{
     #[cfg(test)]
     test_main();
 
-    furst_os::println!("Hello World! The answer is {}", 42);
+    furst_os::println!("Hello World!");
+    furst_os::init();
+    furst_os::println!("It did not crash!");
     loop {}
 }
