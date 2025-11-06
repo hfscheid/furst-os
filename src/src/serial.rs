@@ -29,9 +29,12 @@ macro_rules! serial_println {
 }
 
 use core::fmt::{self, Write};
+use x86_64::instructions::interrupts;
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    SERIAL1.lock()
-        .write_fmt(args)
-        .expect("Printing to serial failed");
+    interrupts::without_interrupts(|| {
+        SERIAL1.lock()
+            .write_fmt(args)
+            .expect("Printing to serial failed");
+    });
 }

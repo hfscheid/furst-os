@@ -134,6 +134,7 @@ impl Writer {
 }
 
 use core::fmt::{self,Write,Result};
+use x86_64::instructions::interrupts;
 
 impl Write for Writer {
     fn write_str(&mut self, s: &str) -> Result {
@@ -157,7 +158,9 @@ pub fn test_vga() {
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    WRITER.lock().write_fmt(args).unwrap();
+    interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+    });
 }
 
 // TESTS
@@ -174,9 +177,12 @@ fn test_println_shift_offscreen() {
 #[test_case]
 fn test_println_output() {
     let s ="test_println_output output";
-    println!("{}", s);
-    for (i, c) in s.chars().enumerate() {
-        let screen_c = WRITER.lock().buffer.chars[BUFFER_HEIGHT-2][i].read();
-        assert_eq!(char::from(screen_c.ascii_character), c);
-    }
+    interrupts::without_interrupts(|| {
+        let mut writer = WRITER.lock();
+        writeln!(writer, "\n{}", s).expect("writeln failed");
+        for (i, c) in s.chars().enumerate() {
+            let screen_c = writer.buffer.chars[BUFFER_HEIGHT-2][i].read();
+            assert_eq!(char::from(screen_c.ascii_character), c);
+        }
+    });
 }
