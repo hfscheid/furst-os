@@ -10,7 +10,7 @@ use furst_os;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     furst_os::println!("{}", info);
-    loop{}
+    furst_os::hlt_loop();
 }
 
 #[unsafe(no_mangle)]
@@ -21,5 +21,5 @@ pub extern "C" fn _start() -> !{
     furst_os::println!("Hello World!");
     furst_os::init();
     furst_os::println!("It did not crash!");
-    loop {}
+    furst_os::hlt_loop();
 }

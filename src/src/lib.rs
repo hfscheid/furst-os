@@ -23,7 +23,7 @@ pub fn test_panic(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
-    loop {}
+    hlt_loop();
 }
 
 // TYPES
@@ -50,11 +50,16 @@ pub enum QemuExitCode {
 }
 
 // FUNCTIONS
+pub fn hlt_loop() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
+}
 #[cfg(test)]
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
     test_main();
-    loop{};
+    hlt_loop();
 }
 
 pub fn init() {
