@@ -10,6 +10,7 @@ pub mod serial;
 pub mod vga_buffer;
 pub mod interrupt;
 pub mod gdt;
+pub mod memory;
 
 // PANIC HANDLER
 use core::panic::PanicInfo;
@@ -55,9 +56,13 @@ pub fn hlt_loop() -> ! {
         x86_64::instructions::hlt();
     }
 }
+
 #[cfg(test)]
-#[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! {
+use bootloader::{BootInfo, entry_point};
+#[cfg(test)]
+entry_point!(test_kernel_main);
+#[cfg(test)]
+fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
     test_main();
     hlt_loop();
 }
