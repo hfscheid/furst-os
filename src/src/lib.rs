@@ -5,12 +5,15 @@
 #![reexport_test_harness_main = "test_main"]
 #![feature(abi_x86_interrupt)]
 
+extern crate alloc;
+
 // REEXPORTS
 pub mod serial;
 pub mod vga_buffer;
 pub mod interrupt;
 pub mod gdt;
 pub mod memory;
+pub mod allocator;
 
 // PANIC HANDLER
 use core::panic::PanicInfo;
