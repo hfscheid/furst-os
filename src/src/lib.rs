@@ -14,6 +14,7 @@ pub mod interrupt;
 pub mod gdt;
 pub mod memory;
 pub mod allocator;
+pub mod task;
 
 // PANIC HANDLER
 use core::panic::PanicInfo;

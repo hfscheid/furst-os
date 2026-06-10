@@ -44,5 +44,11 @@ fn kernel_main(boot_info: &'static BootInfo) -> !{
     };
     furst_os::allocator::init_heap(&mut mapper, &mut frame_allocator)
         .expect("heap initialization failed");
+
+    use furst_os::task::{ self, executor, keyboard };
+    let mut executor = executor::Executor::new();
+    executor.spawn(task::Task::new(keyboard::print_keypresses()));
+    executor.run();
+
     furst_os::hlt_loop();
 }
